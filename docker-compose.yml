@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  llm:
+    image: vllm/vllm-openai:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./model:/root/.cache/huggingface
+    command:
+      - --model=TinyLlama/TinyLlama-1.1B-Chat-v1.0
+      - --dtype=half
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/v1/models"]
+      interval: 20s
+      timeout: 20s
+      retries: 30
+
+  app:
+    build: ./app
+    ports:
+      - "8550:8550"
+    environment:
+      - LLM_API_URL=http://llm:8000/v1/chat/completions
+    depends_on:
+      llm:
+        condition: service_healthy
+    restart: always

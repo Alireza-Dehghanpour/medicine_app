@@ -10,5 +10,5 @@ The app uses the LLM to extract structured patient data from free-form medical t
 ### 1. Clone this Repository
 
 ```bash
-git clone https://github.com/Alireza202412/nuclear_medicine_app.git
+git clone https://github.com/Alireza-Dehghanpour/nuclear_medicine_app.git
 cd nuclear_medicine_app
